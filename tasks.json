@@ -1,0 +1,47 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build with Ant",
+            "type": "shell",
+            "command": "sudo ant",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "EV3 Lejos Upload",
+            "type": "shell",
+            "command": "sshpass -p '' scp -O -oKexAlgorithms=+diffie-hellman-group1-sha1 -oHostKeyAlgorithms=+ssh-rsa -c aes256-cbc ${workspaceFolder}/build/* root@${input:EV3_ipAddress}:/home/lejos/programs/",
+            "presentation": {
+                "reveal": "always"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "EV3 Build & Conditional Upload",
+            "dependsOn": [
+                "Build with Ant",
+                "EV3 Lejos Upload"
+            ],
+            "dependsOrder": "sequence",
+            "group": "build"
+        }
+    ],
+    "inputs": [
+        {
+            "id": "EV3_confirmUpload",
+            "type": "promptString",
+            "description": "Upload build artifacts? (yes/no)",
+            "default": "no"
+        },
+        {
+            "id": "EV3_ipAddress",
+            "type": "promptString",
+            "description": "Enter EV3 IP address",
+            "default": "192.168.8.176"
+        }
+    ]
+}
